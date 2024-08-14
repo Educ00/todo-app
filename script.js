@@ -6,28 +6,39 @@ function addTask() {
         alert("You can't add an empty task!");
     } else {
         let li = document.createElement("li");
+        li.classList.add("unchecked")
         li.innerHTML = inputBox.value;
         listContainer.appendChild(li);
-        let span = document.createElement("span");
-        span.innerHTML = "\u00d7";
-        li.appendChild(span);
     }
     inputBox.value = "";
-    saveData();
+    saveData()
 }
 
 listContainer.addEventListener("click", function(e){
     if(e.target.tagName === "LI"){
-        e.target.classList.toggle("checked");
-        saveData();
-    } else if (e.target.tagName === "SPAN"){
-        e.target.classList.toggle("unchecked");
+        if(e.target.classList.contains("checked")){
+            e.target.classList.remove("checked");
+            e.target.classList.add("unchecked");
+
+        } 
+        else if(e.target.classList.contains("unchecked")){
+            e.target.classList.remove("unchecked");
+            e.target.classList.add("checked");
+
+        }
         saveData();
     }
 }, false)
 
 function saveData(){
     localStorage.setItem("todoList-data", listContainer.innerHTML);
+}
+
+function clearAllData(){
+    while(listContainer.firstChild){
+        listContainer.removeChild(listContainer.firstChild);
+    }
+    localStorage.removeItem("todoList-data");
 }
 
 function showTask(){
